@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import { getImages } from '../../images-api';
@@ -41,6 +41,7 @@ export default function App() {
           <button onClick={loadMoreImages}>Load More</button>
         </>
       )}
+      <Toaster position="top-right" />
     </div>
   );
 }
