@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { CiSearch } from "react-icons/ci";
+import css from './SearchBar.module.css';
 
 export default function SearchBar({ onSubmit }) {
   const [query, setQuery] = useState('');
@@ -19,9 +21,10 @@ export default function SearchBar({ onSubmit }) {
   };
 
   return (
-    <header>
-      <form onSubmit={handleSubmit}>
-        <input
+    <header className={css.header}>
+      <form className={css.form} onSubmit={handleSubmit}>
+        <button className={css.btn} type="submit"><CiSearch className={css.icon} /></button>
+        <input className={css.input}
           type="text"
           autoComplete="off"
           autoFocus
@@ -29,7 +32,6 @@ export default function SearchBar({ onSubmit }) {
           value={query}
           onChange={handleChange}
         />
-        <button type="submit">Search</button>
       </form>
     </header>
   );

@@ -1,0 +1,44 @@
+.header {
+  width: 1600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1655b2;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  border-radius: 3px;
+}
+
+.input {
+  font-size: 20px;
+  display: flex;
+  border: 1px solid white;
+  border-radius: 5px;
+  margin-right: 10px;
+  padding: 5px;
+  outline: none;
+}
+
+.btn {
+  background-color: white;
+  padding: 0;
+  margin-left: 10px;
+}
+
+.btn:hover {
+  border-color: white;
+  outline: none;
+}
+
+.icon {
+  width: 20px;
+  height: 100%;
+}
+
