@@ -1,4 +1,4 @@
-import ImageCard from './ImageCard';
+import ImageCard from '../ImageCard/ImageCard';
 
 export default function ImageGallery({ images }) {
   return (
