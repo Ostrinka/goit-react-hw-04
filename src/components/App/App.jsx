@@ -4,6 +4,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import Loader from '../Loader/Loader';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { getImages } from '../../images-api';
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState();
+  const [error, setError] = useState();
 
   const fetchImages = async (searchQuery) => {
     try {
@@ -20,7 +22,7 @@ export default function App() {
       setQuery(searchQuery);
       setCurrentPage(1); 
     } catch (error) {
-      console.error(error);
+      setError(error);
       toast.error('Failed to fetch images');
     }
       finally {
@@ -35,7 +37,7 @@ export default function App() {
       setImages((prevImages) => [...prevImages, ...newImages]);
       setCurrentPage((prevPage) => prevPage + 1);
     } catch (error) {
-      console.error(error);
+      setError(error);
       toast.error('Failed to fetch more images');
     }
     finally {
@@ -46,14 +48,21 @@ export default function App() {
   return (
     <div>
       <SearchBar onSubmit={fetchImages} />
-      {images.length > 0 && (
+      {!error ? (
         <>
           <ImageGallery images={images} />
           {loading && <Loader />}
-          <LoadMoreBtn loadMoreImages={loadMoreImages} />
+          {images.length > 0 && currentPage < images.length && (
+            <LoadMoreBtn loadMoreImages={loadMoreImages} />
+          )}
+        </>
+      ) : (
+        <>
+          <ErrorMessage error={error} />
         </>
       )}
       <Toaster position="top-right" />
     </div>
+
   );
 }
