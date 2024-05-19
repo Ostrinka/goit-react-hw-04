@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import { getImages } from '../../images-api';
 
 export default function App() {
@@ -38,7 +39,7 @@ export default function App() {
       {images.length > 0 && (
         <>
           <ImageGallery images={images} />
-          <button onClick={loadMoreImages}>Load More</button>
+          <LoadMoreBtn loadMoreImages={loadMoreImages} />
         </>
       )}
       <Toaster position="top-right" />

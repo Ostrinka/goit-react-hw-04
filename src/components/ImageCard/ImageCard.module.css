@@ -1,0 +1,10 @@
+.wrapper img{
+  width: 300px;
+  height: 225px;
+  transition: transform 0.4s ease,
+}
+
+.wrapper img:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}

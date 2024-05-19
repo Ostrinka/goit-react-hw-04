@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn {
+  border: 2px solid #1655b2;
+  border-radius: 3px;
+  background-color: #1655b2;
+  color: white;
+  cursor: pointer;
+  padding-left: 30px;
+  padding-right: 30px;
+}
