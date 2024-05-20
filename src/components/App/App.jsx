@@ -5,6 +5,7 @@ import ImageGallery from '../ImageGallery/ImageGallery';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import ImageModal from '../ImageModal/ImageModal';
 import { getImages } from '../../images-api';
 
 export default function App() {
@@ -13,6 +14,8 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
+  const [modalUrl, setModalUrl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchImages = async (searchQuery) => {
     try {
@@ -45,16 +48,27 @@ export default function App() {
     }
   };
 
+  const openModal = (imageUrl) => {
+    setModalUrl(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalUrl(null);
+  };
+  
   return (
     <div>
       <SearchBar onSubmit={fetchImages} />
       {!error ? (
         <>
-          <ImageGallery images={images} />
+          <ImageGallery images={images} openModal={openModal}/>
           {loading && <Loader />}
           {images.length > 0 && currentPage < images.length && (
             <LoadMoreBtn loadMoreImages={loadMoreImages} />
           )}
+          <ImageModal isOpen={isModalOpen} imageUrl={modalUrl} onClose={closeModal} />
         </>
       ) : (
         <>
