@@ -1,34 +1,19 @@
-import { useEffect } from "react";
 import Modal from "react-modal";
+import css from './ImageModal.module.css'; 
 
-export default function ImageModal({ imageUrl, isOpen, onClose }) {
-  useEffect(() => {
-    Modal.setAppElement('body');
-  }, []);
-
-  if (!imageUrl) return null;
-
+export default function ImageModal({ isOpen, imageUrl, onClose }) {
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      style={{
-        overlay: {
-          backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        },
-        content: {
-          width: '80%',
-          height: '80%',
-          margin: 'auto',
-          padding: '0',
-        },
-      }}
+      contentLabel="Image Modal"
+      className={css.modal}
+      overlayClassName={css.overlay}
+      shouldCloseOnOverlayClick={true}
+      shouldCloseOnEsc={true}
     >
-      <img
-        src={imageUrl}
-        alt="Large"
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-      />
+      <img src={imageUrl} alt="Large" className={css.img} />
     </Modal>
   );
 }
+
