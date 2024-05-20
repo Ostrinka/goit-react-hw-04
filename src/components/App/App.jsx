@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
@@ -12,40 +12,42 @@ export default function App() {
   const [images, setImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState();
-  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [modalUrl, setModalUrl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchImages = async (searchQuery) => {
-    try {
-      setLoading(true);
-      const newImages = await getImages(searchQuery, 1);
-      setImages(newImages);
-      setQuery(searchQuery);
-      setCurrentPage(1); 
-    } catch (error) {
-      setError(error);
-      toast.error('Failed to fetch images');
-    }
-      finally {
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (!query) return;
+
+      try {
+        setLoading(true);
+        const response = await getImages(query, currentPage);
+        if (currentPage === 1) {
+          setImages(response);
+        } else {
+          setImages((prevImages) => [...prevImages, ...response]);
+        }
+      } catch (error) {
+        setError(error);
+        toast.error('Failed to fetch images');
+      } finally {
         setLoading(false);
-    }
+      }
+    };
+
+    fetchImages();
+  }, [query, currentPage]);
+
+  const onSubmit = (searchQuery) => {
+    setCurrentPage(1);
+    setImages([]);
+    setQuery(searchQuery);
   };
 
-  const loadMoreImages = async () => {
-    try {
-      setLoading(true);
-      const newImages = await getImages(query, currentPage + 1);
-      setImages((prevImages) => [...prevImages, ...newImages]);
-      setCurrentPage((prevPage) => prevPage + 1);
-    } catch (error) {
-      setError(error);
-      toast.error('Failed to fetch more images');
-    }
-    finally {
-      setLoading(false);
-    }
+  const onLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   const openModal = (imageUrl) => {
@@ -57,26 +59,25 @@ export default function App() {
     setIsModalOpen(false);
     setModalUrl(null);
   };
-  
+
   return (
     <div>
-      <SearchBar onSubmit={fetchImages} />
+      <SearchBar onSubmit={onSubmit} />
       {!error ? (
         <>
           <ImageGallery images={images} openModal={openModal}/>
           {loading && <Loader />}
+          
           {images.length > 0 && currentPage < images.length && (
-            <LoadMoreBtn loadMoreImages={loadMoreImages} />
+            <LoadMoreBtn loadMoreImages={onLoadMore} />
           )}
           <ImageModal isOpen={isModalOpen} imageUrl={modalUrl} onClose={closeModal} />
         </>
       ) : (
-        <>
-          <ErrorMessage error={error} />
-        </>
+        <ErrorMessage error={error} />
       )}
       <Toaster position="top-right" />
     </div>
-
+    
   );
 }
